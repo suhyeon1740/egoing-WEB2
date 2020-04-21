@@ -1,0 +1,14 @@
+<!-- get할때는 쿼리스트링
+수정, 생성할때는 post
+쿼리스트링으로 생성한다면  http://localhost:3000/?title=3&description=12345 이렇게 주소만 입력해도 글이 추가될 수 있기때문에 안됨 (서버의 데이터가 변경됨)
+그래서 안보이게 숨겨서 post로 보내야함
+-->
+<form action="http://localhost:3000/process_create">
+<p><input type="text" name="title"></p>
+<p>
+    <textarea name="description" id="" cols="30" rows="10"></textarea>
+</p>
+<p>
+    <input type="submit">
+</p>
+</form>
