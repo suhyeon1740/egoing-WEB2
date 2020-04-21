@@ -3,7 +3,7 @@ var fs = require('fs');
 var url = require('url');
 var qs = require('querystring')
 
-function templateHTML(title, list, body) {
+function templateHTML(title, list, body, control) {
     var template = `
     <!doctype html>
     <html>
@@ -14,7 +14,7 @@ function templateHTML(title, list, body) {
     <body>
     <h1><a href="/">WEB - ${title}</a></h1>
     ${list}   
-    <a href="/create">create</a>
+    ${control}
     ${body}
     </body>
     </html>
@@ -24,7 +24,7 @@ function templateHTML(title, list, body) {
 function templateList(fileList) {
     var list = '<ul>'
     for (var i = 0; i < fileList.length; i++) {
-        list += `<li><a href="?id=${fileList[i]}">${fileList[i]}</a></li>`
+        list += `<li><a href="/?id=${fileList[i]}">${fileList[i]}</a></li>`
     }
     list += '</ul>'
     return list
@@ -41,7 +41,7 @@ var app = http.createServer(function (request, response) {
                 var list = templateList(fileList)
                 var title = 'Welcome'
                 var description = 'Hello, Node.js'
-                var template = templateHTML(title, list, `<h2>${title}</h2><p>${description}</p>`)
+                var template = templateHTML(title, list, `<h2>${title}</h2><p>${description}</p>`, `<a href="/create">create</a>`)
                 response.writeHead(200); // 200: 성공 , 404: 찾을 수 없음
                 response.end(template); 
             })            
@@ -50,7 +50,7 @@ var app = http.createServer(function (request, response) {
                 fs.readFile(`data/${queryData.id}`, 'utf8', (err, description) => {                
                     var title = queryData.id   
                     var list = templateList(fileList)
-                    var template = templateHTML(title, list, `<h2>${title}</h2><p>${description}</p>`)
+                    var template = templateHTML(title, list, `<h2>${title}</h2><p>${description}</p>`, `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`)
                     response.writeHead(200); // 200: 성공 , 404: 찾을 수 없음
                     response.end(template);
                 })
@@ -70,7 +70,7 @@ var app = http.createServer(function (request, response) {
                 <input type="submit">
             </p>
             </form>
-            `)
+            `, '')
             response.writeHead(200);
             response.end(template);
         })         
