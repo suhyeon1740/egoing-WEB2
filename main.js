@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var url = require('url');
+var qs = require('querystring')
 
 function templateHTML(title, list, body) {
     var template = `
@@ -28,6 +29,8 @@ function templateList(fileList) {
     list += '</ul>'
     return list
 }
+// request : 요청과 관련된 정보
+// response: 응답과 관련된 정보
 var app = http.createServer(function (request, response) {
     var _url = request.url;
     var queryData = url.parse(_url, true).query; //querystring 가져오기    
@@ -68,9 +71,23 @@ var app = http.createServer(function (request, response) {
             </p>
             </form>
             `)
-            response.writeHead(200); // 200: 성공 , 404: 찾을 수 없음
+            response.writeHead(200);
             response.end(template);
         })         
+    } else if ( pathname === '/process_create') {
+        var body = '';
+        // post 데이터가 너무 많은걸 대비해 data를 조각조각 나눠서 받음
+        // data를 받을때마다 아래처럼 body에 데이터를 추가해줌
+        request.on('data', function (data) {
+            body += data;
+        })
+        // 더이상 받을 데이터가 없으면 end 이벤트가 실행됨
+        request.on('end', function () {
+            var post = qs.parse(body)
+            console.log(post)
+        })
+        response.writeHead(200);
+        response.end('success');
     } else {
         response.writeHead(404)
         response.end("Not found")
