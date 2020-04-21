@@ -84,10 +84,14 @@ var app = http.createServer(function (request, response) {
         // 더이상 받을 데이터가 없으면 end 이벤트가 실행됨
         request.on('end', function () {
             var post = qs.parse(body)
-            console.log(post)
-        })
-        response.writeHead(200);
-        response.end('success');
+            var title = post.title
+            var description = post.description
+            fs.writeFile(`data/${title}`, description, 'utf8', function(err) {                
+                // 리다이랙션: 사용자를 다른 주소로 보내버림
+                response.writeHead(302, {Location: `/?id=${title}`});
+                response.end();
+            })
+        })    
     } else {
         response.writeHead(404)
         response.end("Not found")
