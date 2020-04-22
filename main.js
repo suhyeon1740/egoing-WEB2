@@ -50,7 +50,12 @@ var app = http.createServer(function (request, response) {
                 fs.readFile(`data/${queryData.id}`, 'utf8', (err, description) => {                
                     var title = queryData.id   
                     var list = templateList(fileList)
-                    var template = templateHTML(title, list, `<h2>${title}</h2><p>${description}</p>`, `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`)
+                    var template = templateHTML(title, list, `<h2>${title}</h2><p>${description}</p>`, 
+                        `<a href="/create">create</a> <a href="/update?id=${title}">update</a> 
+                         <form method="post" action="/delete_process">
+                            <input type="hidden" name="id" value="${title}">
+                            <input type="submit" value="delete">
+                         </form>`)
                     response.writeHead(200); // 200: 성공 , 404: 찾을 수 없음
                     response.end(template);
                 })
