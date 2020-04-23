@@ -2,35 +2,7 @@ var http = require('http');
 var fs = require('fs');
 var url = require('url');
 var qs = require('querystring')
-
-var template = {
-    html: function (title, list, body, control) {
-        var template = `
-        <!doctype html>
-        <html>
-        <head>
-        <title>WEB1 - HTML</title>
-        <meta charset="utf-8">
-        </head>
-        <body>
-        <h1><a href="/">WEB - ${title}</a></h1>
-        ${list}   
-        ${control}
-        ${body}
-        </body>
-        </html>
-        `
-        return template
-    },
-    list: function (fileList) {
-        var list = '<ul>'
-        for (var i = 0; i < fileList.length; i++) {
-            list += `<li><a href="/?id=${fileList[i]}">${fileList[i]}</a></li>`
-        }
-        list += '</ul>'
-        return list
-    }
-}
+var template = require('./lib/template.js')
 // request : 요청과 관련된 정보
 // response: 응답과 관련된 정보
 var app = http.createServer(function (request, response) {
